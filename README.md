@@ -1,4 +1,4 @@
 # uniapp_mini_games
 Uni-app mini games integrated with RichTap Haptics uts plugin. The game codes were forked from https://ext.dcloud.net.cn/plugin?id=14189. (Thanks a million.)
 
-RichTap Haptics UTS plugin: https://ext.dcloud.net.cn/plugin?id=20387   
+RichTap Haptics uni-app UTS plugin: https://ext.dcloud.net.cn/plugin?id=20387   

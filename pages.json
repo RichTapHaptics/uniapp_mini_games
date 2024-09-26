@@ -1,0 +1,67 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationStyle": "custom",
+				"navigationBarTitleText": "游戏合集",
+				"enablePullDownRefresh": false,
+				"onReachBottomDistance": 10
+			}
+		}, {
+			"path": "pages/game/redBoxRain/index",
+			"style": {
+				"navigationBarTitleText": "一起来抢红包雨",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/game/jump/index",
+			"style": {
+				"navigationBarTitleText": "惊喜跳一跳",
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": false
+			}
+
+		}
+	    ,{
+            "path" : "pages/game/luckyGrid/luckyGrid",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "九宫格抽奖",
+                "navigationStyle": "custom",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/game/supperzzle/supperzzle",
+            "style" :                                                                                    
+            {
+               "navigationBarTitleText": "对对碰",
+               "navigationStyle": "custom",
+               "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/game/car/index",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "激情赛车",
+                "navigationStyle": "custom",
+                "enablePullDownRefresh": false,
+				"disableScroll":true
+            }
+            
+        }
+    ],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "游戏合集",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"uniIdRouter": {}
+}

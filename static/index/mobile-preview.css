@@ -1,0 +1,18 @@
+/* 针对PC的样式 */
+@media only screen and (min-width: 1024px) {
+  /* 页面内容居中 */
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	
+  }
+  
+  /* 设置页面宽度和高度 */
+  html, body {
+    width: 375px; /* 模拟手机宽度 */
+    height: 667px; /* 模拟手机高度 */
+	margin: 0 auto;
+    overflow: hidden; /* 隐藏页面溢出内容 */
+  }
+}

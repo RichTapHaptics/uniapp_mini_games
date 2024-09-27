@@ -1,0 +1,77 @@
+import { FailFunc, SuccessFunc } from './unierror.uts'
+
+export type GetSDKVersionParams = {
+	success: (res: string) => void
+	fail?: FailFunc
+}
+
+export type GetSDKVersion = (options: GetSDKVersionParams) => void
+
+export type GetPluginVersionParams = {
+	success: (res: string) => void
+	fail?: FailFunc
+}
+
+export type GetPluginVersion = (options: GetPluginVersionParams) => void
+
+export type IsRichTapSupportedParams = {
+	success: (res: boolean) => void
+	fail?: FailFunc
+}
+
+export type IsRichTapSupported = (options: IsRichTapSupportedParams) => void
+
+export type InitializeParams = {
+	success?: SuccessFunc
+	fail?: FailFunc
+}
+
+export type Initialize = (options: InitializeParams) => void
+
+export type QuitParams = {
+	success?: SuccessFunc
+	fail?: FailFunc
+}
+
+export type Quit = (options: QuitParams) => void
+
+export type PlayHapticParams = {
+	heStr: string
+	loop: number
+	interval: number
+	intensity: number
+	frequency: number
+	success?: SuccessFunc
+	fail?: FailFunc
+}
+
+export type PlayHaptic = (options: PlayHapticParams) => void
+
+export type StopHapticParams = {
+	success?: SuccessFunc
+	fail?: FailFunc
+}
+
+export type StopHaptic = (options: StopHapticParams) => void
+
+export type UpdateLoopParametersParams = {
+	intensity: number
+	interval: number
+	frequency: number
+	success?: SuccessFunc
+	fail?: FailFunc
+}
+
+export type UpdateLoopParameters = (options: UpdateLoopParametersParams) => void
+
+export type PrebakedEffectName = 'RT_CLICK' | 'RT_GUNSHOT' | 'RT_DOUBLE_CLICK' | 'RT_SPEED_UP' | 'RT_SOFT_CLICK' | 'RT_JUMP' | 'RT_TICK' | 'RT_DRUM' | 'RT_THUD' | 'RT_COIN_DROP' | 'RT_FAILURE' | 'RT_HEARTBEAT' | 'RT_SUCCESS' | 'RT_PLUCKING' | 'RT_RAMP_UP'	| 'RT_DRAWING_ARROW' | 'RT_TOGGLE_SWITCH'	| 'RT_CAMERA_SHUTTER' | 'RT_LONG_PRESS'	| 'RT_FIREWORKS' | 'RT_VIRTUAL_KEY'	| 'RT_SNIPER_RIFLE' | 'RT_KEYBOARD_TAP'	| 'RT_ASSAULT_RIFLE' | 'RT_CLOCK_TICK'	| 'RT_CYMBAL' | 'RT_CALENDAR_DATE' | 'RT_TAMBOURINE' | 'RT_CONTEXT_CLICK' | 'RT_FAST_MOVING' | 'RT_KEYBOARD_RELEASE' | 'RT_FLY' | 'RT_VIRTUAL_KEY_RELEASE'	| 'RT_FOOTSTEP' | 'RT_TEXT_HANDLE_MOVE'	| 'RT_ICE' | 'RT_ENTRY_BUMP' | 'RT_LIGHTNING' | 'RT_DRAG_CROSSING' | 'RT_SPRING' | 'RT_GESTURE'	| 'RT_SWING' | 'RT_CONFIRM'	| 'RT_WIND' | 'RT_REJECT'	| 'RT_VICTORY' | 'RT_BOMB' | 'RT_AWARD' | 'RT_SWORD'	| 'RT_GAMEOVER'
+
+export type PlayExtPrebakedParams = {
+	effectName: PrebakedEffectName
+	intensity: number
+	success?: SuccessFunc
+	fail?: FailFunc
+}
+
+export type PlayExtPrebaked = (options: PlayExtPrebakedParams) => void
+

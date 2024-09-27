@@ -1,0 +1,36 @@
+{
+    "Metadata": {
+        "Created": "2024-09-27",
+        "Description": "Exported from RichTap Creator Pro",
+        "Version": 2
+    },
+    "PatternList": [
+        {
+            "AbsoluteTime": 0,
+            "Pattern": [
+                {
+                    "Event": {
+                        "Type": "transient",
+                        "RelativeTime": 0,
+                        "Parameters": {
+                            "Intensity": 70,
+                            "Frequency": 35
+                        },
+                        "Index": 0
+                    }
+                },
+                {
+                    "Event": {
+                        "Type": "transient",
+                        "RelativeTime": 147,
+                        "Parameters": {
+                            "Intensity": 100,
+                            "Frequency": 45
+                        },
+                        "Index": 0
+                    }
+                }
+            ]
+        }
+    ]
+}

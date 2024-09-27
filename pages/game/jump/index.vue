@@ -7,7 +7,6 @@
 			<image @click="musicPlay()" class="music" mode="widthFix" src="@/static/jump/music-off.png" v-else>
 			</image>
 
-
 			<image class="fd" mode="widthFix" v-for="(item,index) in fd" :key="index"
 				:style="{top:item.top,left:item.left}" :src="item.src">
 			</image>
@@ -42,25 +41,23 @@
 
 		<view v-if="gameStatus == 1">
 			<image class="icon" src="@/static/jump/6.png" mode="widthFix"></image>
-
 			<view class="start" @tap="start">
 				开始游戏
 			</view>
-
 			<view class="clear" @tap="clear">
 				清除缓存
 			</view>
 		</view>
-
-
-
-
 	</view>
 </template>
 
 <script>
-	export default {
+	import { playExtPrebaked, initialize, quit, stopHaptic, playHaptic } from '@/uni_modules/richtap-haptic-lite'
+	import he1 from '@/static/jump/dice-rotate.json'
+	import he2 from '@/static/jump/dice-stop.json'
+	import he3 from '@/static/jump/bomb.json'
 
+	export default {
 		data() {
 			return {
 				// 游戏状态
@@ -208,11 +205,23 @@
 						left: "54%"
 					}
 				],
-
+				diceRotateHe: '',
+				diceStopHe: '',
+				bombHe: ''
 			};
 		},
-
-		onLoad(option) {
+		mounted() {
+			console.log('jump mounted');
+			initialize({
+				fail: (err) => {
+					console.log(err.errCode);
+				}
+			})
+			this.diceStopHe = JSON.stringify(he2)
+			this.diceRotateHe = JSON.stringify(he1)
+			this.bombHe = JSON.stringify(he3)
+		},
+		onLoad (option) {
 			// 初始化主角位置
 			let now = uni.getStorageSync('now');
 			if(now){
@@ -227,23 +236,57 @@
 			this.innerAudioContext.src = '../../../static/jump/bgm.mp3';
 			
 		},
-		onUnload(){
+		onUnload () {
 			this.musicStop()
+			console.log('jump onUnload');
+			quit({
+				fail: (err) => {
+					console.log(err.errCode);
+				}
+			})
 		},
-		onHide() {
+		onHide () {
 			this.musicStop()
 		},
 
 		methods: {
+			playHaptic (effectName = 'RT_CLICK', intensity = 255) {
+				playExtPrebaked({
+					effectName,
+					intensity,
+					fail: (err) => {
+						console.log(err.errCode);
+					}
+				})
+			},
+			
+			playHe (he) {
+				playHaptic({
+					heStr: he,
+					loop: 0,
+					intensity: 255,
+					interval: 0,
+					frequency: 0,
+				})
+			},
+			
+			stopAllHaptic () {
+				stopHaptic({
+					fail: (err) => {
+						console.log(err.errCode);
+					}
+				})
+			},
 
 			start() {
-				
+				this.playHaptic()
 				this.gameStatus = 2;
 				this.maskShow = false;
 				this.musicPlay();
 			},
 
 			clear() {
+				this.playHaptic()
 				uni.clearStorage('now');
 				this.now = 0;
 				this.rabitStyle = this.xy[this.now];
@@ -270,16 +313,19 @@
 
 
 			jump() {
-				if(this.playStatus){
+				if(this.playStatus) {
 					this.playStatus = false;
 					var that = this;
 					// 骰子点数
 					var num = Math.ceil(Math.random() * 6);
+					// var num = 1
 					// 开启遮罩
 					that.maskShow = true;
 					// 骰子旋转
 					that.diceShow = true;
+					that.playHe(that.diceRotateHe)
 					setTimeout(function() {
+						that.playHe(that.diceStopHe)
 						that.diceShow = false;
 						that.diceShow1 = true;
 						that.diceBg = {
@@ -287,7 +333,6 @@
 							'background-repeat': 'no-repeat',
 							'background-size': '100%'
 						}
-						console.log(that.diceBg)
 					}, 1500)
 					
 					var max = 0;
@@ -297,13 +342,16 @@
 						var t = setInterval(function() {
 							max++;
 							if (max > num) {
+								console.log('停止');
+								that.stopAllHaptic()
 								uni.setStorageSync('now',that.now);
 								that.playStatus = true;
 								that.check();
 								clearInterval(t);
 							} else {
+								console.log(`移动中: ${max}/${num}`);
+								that.playHaptic('RT_FOOTSTEP', 255)
 								that.now = Number(that.now) + 1;
-								console.log(that.now);
 								if (that.now > 19) {
 									that.now = 0;
 								}
@@ -312,19 +360,22 @@
 					
 						}, 600)
 					
-					}, 3500)
+					}, 2500)
 				}
 				
 			},
 			
 			check(){
 				if(this.now == 4 || this.now == 11 || this.now == 19){
+					this.playHaptic('RT_AWARD', 255)
 					uni.showToast({
 						icon:'none',
 						duration:2500,
 						title:'恭喜您获得1个福袋礼包'
 					})
 				}else if(this.now == 5 || this.now == 9 || this.now == 16){
+					// this.playHaptic('RT_BOMB', 255)
+					this.playHe(this.bombHe)
 					uni.showToast({
 						icon:'none',
 						duration:2000,
@@ -339,6 +390,10 @@
 						that.pengShow = false
 					},3000)
 				}else if(this.now == 7 || this.now == 14){
+					this.playHaptic('RT_FOOTSTEP', 255)
+					setTimeout(() => {
+						this.stopAllHaptic()
+					}, 600)
 					uni.showToast({
 						icon:'none',
 						duration:2000,

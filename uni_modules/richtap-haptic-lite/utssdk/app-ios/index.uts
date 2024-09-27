@@ -1,0 +1,309 @@
+import { RichTapHapticUtils, RichTapSDKVersionNumber, PrebakedEffectId } from 'RichTapSDK'
+import { PLUGIN_VERSION } from '../define.uts'
+import { HapticError } from '../unierror.uts'
+import { GetSDKVersion, GetPluginVersion, IsRichTapSupported, Initialize, Quit, PlayHaptic, StopHaptic, UpdateLoopParameters, PlayExtPrebaked, GetPrebakedEffectId, PrebakedEffectItem } from '../interface.uts'
+
+/**
+ * 获取SDK版本号
+ * @param success SDK版本号
+ * @param fail 错误回调 可选参数 当发送异常时会通过fail回调函数把错误抛出
+ */
+export const getSDKVersion: GetSDKVersion = (options): void => {
+	try{
+		const version: number = UTSiOS.try(Number.from(RichTapSDKVersionNumber))
+		options.success(version.toString())
+	} catch (err) {
+		console.error(err)
+		options.fail?.(new HapticError(9010001, err))
+		// throw err
+	}
+}
+
+/**
+ * 获取当前插件版本
+ * @param success 插件版本号
+ * @param fail 错误回调 可选参数 当发送异常时会通过fail回调函数把错误抛出
+ */
+export const getPluginVersion: GetPluginVersion = (options): void => {
+	try{
+		options.success(PLUGIN_VERSION)
+	} catch (err){
+		console.error(err)
+		options.fail?.(new HapticError(9010002, err))
+	}
+}
+
+/**
+ * 判断是否支持RichTap振动
+ * @param success 成功回调 返回布尔值代表是否支持高品质振动
+ * @param fail 错误回调 可选参数 当发送异常时会通过fail回调函数把错误抛出
+ */
+export const isRichTapSupported: IsRichTapSupported = (options): void => {
+	try{
+		const flag = UTSiOS.try(RichTapHapticUtils.supportRichTap())
+		options.success(flag)
+	} catch (err) {
+		console.error(err)
+		options.fail?.(new HapticError(9010003, err))
+	}
+}
+
+/**
+ * 初始化RichTap插件
+ * @param success 成功回调 可选参数
+ * @param fail 错误回调 可选参数，当发送异常时会通过fail回调函数把错误抛出
+ */
+export const initialize: Initialize = (options): void => {
+	try{
+		console.log('initialize')
+		options.success?.()
+	} catch (err) {
+		console.log(err)
+		options.fail?.(new HapticError(9010004, err))
+	}
+}
+
+/**
+ * 释放/退出RichTap资源
+ * @param success 成功回调 可选参数
+ * @param fail 错误回调 可选参数，当发送异常时会通过fail回调函数把错误抛出
+ */
+export const quit: Quit = (options): void => {
+	try{
+		console.log('quit')
+		UTSiOS.try(RichTapHapticUtils.quit(null))
+		options.success?.()
+	} catch (err) {
+		console.error(err)
+		options.fail?.(new HapticError(9010005, err))
+	}
+}
+
+/**
+ * 播放振动效果
+ * @param heStr json字符串
+ * @param loop 循环次数 取值范围是大于等于-1，-1表示无限再循环
+ * @param interval 间隔 表示两次播放之间的时间间隔
+ * @param intensity 强度缩放值 取值范围是[0, 511]，255表示不对HE强度做缩放
+ * @param frequency 变频值 取值范围[-100, 100]，0表示不对HE做变频
+ * @param success 成功回调 可选参数
+ * @param fail 错误回调 可选参数，当发送异常时会通过fail回调函数把错误抛出
+ */
+export const playHaptic: PlayHaptic = (options): void => {
+	try {
+		UTSiOS.try(RichTapHapticUtils.playHaptic(options.heStr, loop = options.loop.toInt32(), amplitude = options.intensity.toInt32(), error = null))
+		options.success?.()
+	} catch (err) {
+		console.error(err)
+		options.fail?.(new HapticError(9010006, err))
+	}
+}
+
+/**
+ * 停止所有振动
+ * @param success 成功回调 可选参数
+ * @param fail 错误回调 可选参数 当发送异常时会通过fail回调函数把错误抛出
+ */
+export const stopHaptic: StopHaptic = (options): void => {
+	try {
+		console.log('stopHaptic')
+		UTSiOS.try(RichTapHapticUtils.stop(null))
+		options.success?.()
+	} catch (err) {
+		console.error(err)
+		options.fail?.(new HapticError(9010007, err))
+	}
+}
+
+/**
+ * 设置播放效果参数
+ * @param intensity 强度缩放值 取值范围是[0, 255]，255表示不对HE强度做缩放
+ * @param interval 间隔 表示两次播放之间的时间间隔
+ * @param frequency 变频值 取值范围[-100, 100]，0表示不对HE做变频
+ * @param success 成功回调 可选参数
+ * @param fail 错误回调 可选参数 当发送异常时会通过fail回调函数把错误抛出
+ */
+export const updateLoopParameters: UpdateLoopParameters = (options): void => {
+	try{
+		console.log('updateLoopParameters')
+		UTSiOS.try(RichTapHapticUtils.sendLoopParameter(options.intensity.toInt32(), interval = options.interval.toInt32(), freq = options.frequency.toInt32(), error = null))
+		options.success?.()
+	} catch (err) {
+		console.error(err)
+		options.fail?.(new HapticError(9010008, err))
+	}
+}
+
+/**
+ * 播放内置效果库中的振动效果
+ * @param options.effectName 内置效果名称
+ * @param options.intensity 强度缩放值 取值范围是[0, 255]，255表示100%增益
+ * @param options.success 成功回调 可选参数
+ * @param options.fail 错误回调 可选参数 当发送异常时会通过fail回调函数把错误抛出
+ */
+export const playExtPrebaked: PlayExtPrebaked = (options): void => {
+	try{
+		console.log('playExtPrebaked');
+		let effectId: PrebakedEffectId = PrebakedEffectId.RT_CLICK
+		switch (options.effectName) {
+			case 'RT_CLICK':
+				effectId = PrebakedEffectId.RT_CLICK
+				break;
+			case 'RT_GUNSHOT':
+				effectId = PrebakedEffectId.RT_GUNSHOT
+				break;
+			case 'RT_DOUBLE_CLICK':
+				effectId = PrebakedEffectId.RT_DOUBLE_CLICK
+				break;
+			case 'RT_SPEED_UP':
+				effectId = PrebakedEffectId.RT_SPEED_UP
+				break;
+			case 'RT_SOFT_CLICK':
+				effectId = PrebakedEffectId.RT_SOFT_CLICK
+				break;
+			case 'RT_JUMP':
+				effectId = PrebakedEffectId.RT_JUMP
+				break;
+			case 'RT_TICK':
+				effectId = PrebakedEffectId.RT_TICK
+				break;
+			case 'RT_DRUM':
+				effectId = PrebakedEffectId.RT_DRUM
+				break;
+			case 'RT_THUD':
+				effectId = PrebakedEffectId.RT_THUD
+				break;
+			case 'RT_COIN_DROP':
+				effectId = PrebakedEffectId.RT_COIN_DROP
+				break;
+			case 'RT_FAILURE':
+				effectId = PrebakedEffectId.RT_FAILURE
+				break;
+			case 'RT_HEARTBEAT':
+				effectId = PrebakedEffectId.RT_HEARTBEAT
+				break;
+			case 'RT_SUCCESS':
+				effectId = PrebakedEffectId.RT_SUCCESS
+				break;
+			case 'RT_PLUCKING':
+				effectId = PrebakedEffectId.RT_PLUCKING
+				break;
+			case 'RT_RAMP_UP':
+				effectId = PrebakedEffectId.RT_RAMP_UP
+				break;
+			case 'RT_DRAWING_ARROW':
+				effectId = PrebakedEffectId.RT_DRAWING_ARROW
+				break;
+			case 'RT_TOGGLE_SWITCH':
+				effectId = PrebakedEffectId.RT_TOGGLE_SWITCH
+				break;
+			case 'RT_CAMERA_SHUTTER':
+				effectId = PrebakedEffectId.RT_CAMERA_SHUTTER
+				break;
+			case 'RT_LONG_PRESS':
+				effectId = PrebakedEffectId.RT_LONG_PRESS
+				break;
+			case 'RT_FIREWORKS':
+				effectId = PrebakedEffectId.RT_FIREWORKS
+				break;
+			case 'RT_VIRTUAL_KEY':
+				effectId = PrebakedEffectId.RT_VIRTUAL_KEY
+				break;
+			case 'RT_SNIPER_RIFLE':
+				effectId = PrebakedEffectId.RT_SNIPER_RIFLE
+				break;
+			case 'RT_KEYBOARD_TAP':
+				effectId = PrebakedEffectId.RT_KEYBOARD_TAP
+				break;
+			case 'RT_ASSAULT_RIFLE':
+				effectId = PrebakedEffectId.RT_ASSAULT_RIFLE
+				break;
+			case 'RT_CLOCK_TICK':
+				effectId = PrebakedEffectId.RT_CLOCK_TICK
+				break;
+			case 'RT_CYMBAL':
+				effectId = PrebakedEffectId.RT_CYMBAL
+				break;
+			case 'RT_CALENDAR_DATE':
+				effectId = PrebakedEffectId.RT_CALENDAR_DATE
+				break;
+			case 'RT_TAMBOURINE':
+				effectId = PrebakedEffectId.RT_TAMBOURINE
+				break;
+			case 'RT_CONTEXT_CLICK':
+				effectId = PrebakedEffectId.RT_CONTEXT_CLICK
+				break;
+			case 'RT_FAST_MOVING':
+				effectId = PrebakedEffectId.RT_FAST_MOVING
+				break;
+			case 'RT_KEYBOARD_RELEASE':
+				effectId = PrebakedEffectId.RT_KEYBOARD_RELEASE
+				break;
+			case 'RT_FLY':
+				effectId = PrebakedEffectId.RT_FLY
+				break;
+			case 'RT_VIRTUAL_KEY_RELEASE':
+				effectId = PrebakedEffectId.RT_VIRTUAL_KEY_RELEASE
+				break;
+			case 'RT_FOOTSTEP':
+				effectId = PrebakedEffectId.RT_FOOTSTEP
+				break;
+			case 'RT_TEXT_HANDLE_MOVE':
+				effectId = PrebakedEffectId.RT_TEXT_HANDLE_MOVE
+				break;
+			case 'RT_ICE':
+				effectId = PrebakedEffectId.RT_ICE
+				break;
+			case 'RT_ENTRY_BUMP':
+				effectId = PrebakedEffectId.RT_ENTRY_BUMP
+				break;
+			case 'RT_LIGHTNING':
+				effectId = PrebakedEffectId.RT_LIGHTNING
+				break;
+			case 'RT_DRAG_CROSSING':
+				effectId = PrebakedEffectId.RT_DRAG_CROSSING
+				break;
+			case 'RT_SPRING':
+				effectId = PrebakedEffectId.RT_SPRING
+				break;
+			case 'RT_GESTURE':
+				effectId = PrebakedEffectId.RT_GESTURE
+				break;
+			case 'RT_SWING':
+				effectId = PrebakedEffectId.RT_SWING
+				break;
+			case 'RT_CONFIRM':
+				effectId = PrebakedEffectId.RT_CONFIRM
+				break;
+			case 'RT_WIND':
+				effectId = PrebakedEffectId.RT_WIND
+				break;
+			case 'RT_REJECT':
+				effectId = PrebakedEffectId.RT_REJECT
+				break;
+			case 'RT_VICTORY':
+				effectId = PrebakedEffectId.RT_VICTORY
+				break;
+			case 'RT_BOMB':
+				effectId = PrebakedEffectId.RT_BOMB
+				break;
+			case 'RT_AWARD':
+				effectId = PrebakedEffectId.RT_AWARD
+				break;
+			case 'RT_SWORD':
+				effectId = PrebakedEffectId.RT_SWORD
+				break;
+			case 'RT_GAMEOVER':
+				effectId = PrebakedEffectId.RT_GAMEOVER
+				break;
+			default:
+				effectId = PrebakedEffectId.RT_CLICK
+				break;
+		}
+		UTSiOS.try(RichTapHapticUtils.playExtPreBaked(effectId, strength = options.intensity.toInt32(), error = null))
+		options.success?.()
+	} catch (err) {
+		console.error(err)
+		options.fail?.(new HapticError(9010009, new Error(err.toString())))
+	}
+}

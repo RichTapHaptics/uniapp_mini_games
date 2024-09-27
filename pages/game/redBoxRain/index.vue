@@ -51,7 +51,7 @@
 						本轮红包雨一共抢到{{redNumber}}个红包
 					</view>
 					
-					<view class="btn" @tap="align">
+					<view class="btn" @tap="playAgain">
 						再玩一次
 					</view>
 				</view>
@@ -62,6 +62,8 @@
 </template>
 
 <script>
+	import { playExtPrebaked, initialize, quit } from '@/uni_modules/richtap-haptic-lite'
+	
 	export default {
 		data() {
 			return {
@@ -90,11 +92,34 @@
 				]
 			}
 		},
-		onLoad() {
-
+		mounted() {
+			console.log('redBoxRain mounted');
+			initialize({
+				fail: (err) => {
+					console.log(err.errCode);
+				}
+			})
+		},
+		onUnload() {
+			console.log('redBoxRain onUnload');
+			quit({
+				fail: (err) => {
+					console.log(err.errCode);
+				}
+			})
 		},
 		methods: {
+			playHaptic () {
+				playExtPrebaked({
+					effectName: 'RT_CLICK',
+					intensity: 255,
+					fail: (err) => {
+						console.log(err.errCode);
+					}
+				})
+			},
 			start() {
+				this.playHaptic()
 				let that = this;
 				that.gameStatus = 2;
 				that.readyStatus = true;
@@ -126,7 +151,7 @@
 					if (that.downTime == 0) {
 						that.gameStatus = 3;
 						let onNumber = Math.round(that.redNumber/(that.redBox.length/5));
-						that.stars.fill('../../../static/redBoxRain/starOn.png',0,onNumber);
+						that.stars.fill('../../../static/redBoxRain/starOn.png', 0, onNumber);
 						clearInterval(downTimer);
 					} else {
 						that.downTime--;
@@ -180,14 +205,29 @@
 				let index = event.currentTarget.dataset.index;
 				
 				if(this.redBox[index].status){
+					this.playHaptic()
 					this.redBox[index].status = false;
 					this.redNumber++
 				}
 				
 				event.preventDefault();
 			},
-			align(){
-				location.href = '';
+			reset () {
+				this.redBox = []
+				this.downTime = 30
+				this.ready = 'ready'
+				this.redNumber = 0
+				this.stars = [
+					'../../../static/redBoxRain/starOff.png',
+					'../../../static/redBoxRain/starOff.png',
+					'../../../static/redBoxRain/starOff.png',
+					'../../../static/redBoxRain/starOff.png',
+					'../../../static/redBoxRain/starOff.png'
+				]
+			},
+			playAgain () {
+				this.reset()
+				this.start()
 			}
 		}
 	}

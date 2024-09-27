@@ -1,0 +1,90 @@
+{
+  "id": "richtap-haptic-lite",
+  "displayName": "RichTap Haptics",
+  "version": "1.0.0",
+  "description": "本插件可以轻松赋予应用高品质触觉体验。内置50+种振动效果，开箱即用；也可以通过 RichTap Creator Pro 工具软件创建自己专属的振动效果。",
+  "keywords": [
+    "振动",
+    "触觉反馈",
+    "Haptic",
+    "Vibrate",
+    "RichTap"
+],
+  "repository": "",
+  "engines": {
+    "HBuilderX": "^4.24"
+  },
+  "dcloudext": {
+    "type": "uts",
+    "sale": {
+      "regular": {
+        "price": "0.00"
+      },
+      "sourcecode": {
+        "price": "0.00"
+      }
+    },
+    "contact": {
+      "qq": ""
+    },
+    "declaration": {
+      "ads": "无",
+      "data": "插件不采集任何数据",
+      "permissions": "无"
+    },
+    "npmurl": ""
+  },
+  "uni_modules": {
+    "dependencies": [],
+    "encrypt": [],
+    "platforms": {
+      "cloud": {
+        "tcb": "y",
+        "aliyun": "y",
+        "alipay": "y"
+      },
+      "client": {
+        "Vue": {
+          "vue2": "y",
+          "vue3": "y"
+        },
+        "App": {
+          "app-android": {
+            "minVersion": "26"
+        },
+          "app-ios": {
+            "minVersion": "12"
+        }
+        },
+        "H5-mobile": {
+          "Safari": "n",
+          "Android Browser": "n",
+          "微信浏览器(Android)": "n",
+          "QQ浏览器(Android)": "n"
+        },
+        "H5-pc": {
+          "Chrome": "n",
+          "IE": "n",
+          "Edge": "n",
+          "Firefox": "n",
+          "Safari": "n"
+        },
+        "小程序": {
+          "微信": "n",
+          "阿里": "n",
+          "百度": "n",
+          "字节跳动": "n",
+          "QQ": "n",
+          "钉钉": "n",
+          "快手": "n",
+          "飞书": "n",
+          "京东": "n"
+        },
+        "快应用": {
+          "华为": "n",
+          "联盟": "n"
+        }
+      }
+    }
+  }
+}

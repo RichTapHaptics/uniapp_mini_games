@@ -40,6 +40,8 @@
 </template>
 
 <script>
+	import { playExtPrebaked, initialize, quit, playHaptic } from '@/uni_modules/richtap-haptic-lite'
+
 	export default {
 		data() {
 			return {
@@ -87,19 +89,43 @@
 				touchStartX: null,
 				// 手指触摸移动x坐标
 				touchMoveX: null,
-
+				// 加油he效果
+				he1: '{\"Metadata\":{\"Version\":2,\"Created\":\"2022-04-27\",\"Description\":\"Exported from RichTap Creator Pro\"},\"PatternList\":[{\"AbsoluteTime\":13,\"Pattern\":[{\"Event\":{\"Type\":\"continuous\",\"Duration\":2468,\"RelativeTime\":0,\"Parameters\":{\"Intensity\":97,\"Frequency\":34,\"Curve\":[{\"Time\":0,\"Intensity\":0,\"Frequency\":-7},{\"Time\":42,\"Intensity\":1,\"Frequency\":-6},{\"Time\":128,\"Intensity\":0.94,\"Frequency\":-4},{\"Time\":217,\"Intensity\":0.63,\"Frequency\":-14},{\"Time\":763,\"Intensity\":0.53,\"Frequency\":-10},{\"Time\":1125,\"Intensity\":0.48,\"Frequency\":-14},{\"Time\":1503,\"Intensity\":0.42,\"Frequency\":-14},{\"Time\":1858,\"Intensity\":0.39,\"Frequency\":-14},{\"Time\":2295,\"Intensity\":0.34,\"Frequency\":-17},{\"Time\":2448,\"Intensity\":0.21,\"Frequency\":-14},{\"Time\":2468,\"Intensity\":0,\"Frequency\":-21}]},\"Index\":0}},{\"Event\":{\"Type\":\"continuous\",\"Duration\":2468,\"RelativeTime\":2,\"Parameters\":{\"Intensity\":97,\"Frequency\":27,\"Curve\":[{\"Time\":0,\"Intensity\":0,\"Frequency\":-7},{\"Time\":47,\"Intensity\":0.9,\"Frequency\":-6},{\"Time\":128,\"Intensity\":0.84,\"Frequency\":-4},{\"Time\":143,\"Intensity\":0.59,\"Frequency\":-14},{\"Time\":183,\"Intensity\":0.16,\"Frequency\":-10},{\"Time\":1081,\"Intensity\":0.1,\"Frequency\":-14},{\"Time\":1464,\"Intensity\":0.07,\"Frequency\":-14},{\"Time\":1826,\"Intensity\":0.04,\"Frequency\":-14},{\"Time\":2056,\"Intensity\":0.04,\"Frequency\":-17},{\"Time\":2391,\"Intensity\":0.03,\"Frequency\":-14},{\"Time\":2468,\"Intensity\":0,\"Frequency\":-21}]},\"Index\":0}}]},{\"AbsoluteTime\":2486,\"Pattern\":[{\"Event\":{\"Type\":\"continuous\",\"Duration\":570,\"RelativeTime\":0,\"Parameters\":{\"Intensity\":80,\"Frequency\":90,\"Curve\":[{\"Time\":0,\"Intensity\":0,\"Frequency\":-100},{\"Time\":127,\"Intensity\":0.09,\"Frequency\":-80},{\"Time\":263,\"Intensity\":0.97,\"Frequency\":-34},{\"Time\":300,\"Intensity\":0.92,\"Frequency\":-34},{\"Time\":464,\"Intensity\":0.16,\"Frequency\":-60},{\"Time\":570,\"Intensity\":0,\"Frequency\":-88}]},\"Index\":0}}]}]}'
 			};
 		},
-		onLoad() {
-			// 禁止页面滑动
+		mounted() {
+			console.log('luckyGrid mounted');
+			initialize({
+				fail: (err) => {
+					console.log(err.errCode);
+				}
+			})
 		},
 		onUnload() {
-			this.player.pause();
+			console.log('luckyGrid onUnload');
+			quit({
+				fail: (err) => {
+					console.log(err.errCode);
+				}
+			})
+		},
+		onUnload() {
+			if (this.player) {
+				this.player.pause();
+			}
 			clearInterval(this.requestID);
 		},
 
 		methods: {
-
+			playHaptic (effectName = 'RT_CLICK') {
+				playExtPrebaked({
+					effectName,
+					intensity: 255,
+					fail: (err) => {
+						console.log(err.errCode);
+					}
+				})
+			},
 			// 异步获取设备信息
 			getSystemInfo() {
 				let that = this;
@@ -214,6 +240,7 @@
 			},
 			// 选择车辆
 			checkCar(n) {
+				this.playHaptic()
 				this.check1 = '';
 				this.check2 = '';
 				n == 1 ? this.check1 = 'check' : this.check2 = 'check';
@@ -221,6 +248,7 @@
 
 			// 开始游戏
 			async startGame() {
+				this.playHaptic()
 				this.start = true;
 				this.player = uni.createInnerAudioContext();
 				this.playMusic(0);
@@ -380,6 +408,14 @@
 
 						if (box.type == 1) {
 							// 碰撞油桶,增加游戏时间
+							// this.playHaptic('RT_AWARD')
+							playHaptic({
+								heStr: this.he1,
+								loop: 0,
+								intensity: 255,
+								interval: 0,
+								frequency: 0,
+							})
 							this.playMusic(1);
 							this.downTime = this.downTime + 3;
 							this.boxs.splice(i, 1);
@@ -388,6 +424,7 @@
 							ctx.fillText('+3s', box.x, box.y);
 							ctx.clearRect(box.x, box.y, box.width, box.height);
 						} else {
+							this.playHaptic('RT_BOMB')
 							// 碰撞障碍物，游戏结束
 							this.player.stop();
 							this.downTime = 0;

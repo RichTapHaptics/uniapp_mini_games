@@ -1,0 +1,73 @@
+{
+    "Metadata": {
+        "Created": "2024-09-27",
+        "Description": "Exported from RichTap Creator Pro",
+        "Version": 2
+    },
+    "PatternList": [
+        {
+            "AbsoluteTime": 0,
+            "Pattern": [
+                {
+                    "Event": {
+                        "Type": "continuous",
+                        "RelativeTime": 0,
+                        "Parameters": {
+                            "Intensity": 80,
+                            "Frequency": 50,
+                            "Curve": [
+                                {
+                                    "Time": 0,
+                                    "Intensity": 0,
+                                    "Frequency": 0
+                                },
+                                {
+                                    "Time": 1,
+                                    "Intensity": 1,
+                                    "Frequency": 0
+                                },
+                                {
+                                    "Time": 135,
+                                    "Intensity": 1,
+                                    "Frequency": 0
+                                },
+                                {
+                                    "Time": 228,
+                                    "Intensity": 0.28,
+                                    "Frequency": 0
+                                },
+                                {
+                                    "Time": 239,
+                                    "Intensity": 0.74,
+                                    "Frequency": 0
+                                },
+                                {
+                                    "Time": 382,
+                                    "Intensity": 0.23,
+                                    "Frequency": 0
+                                },
+                                {
+                                    "Time": 383,
+                                    "Intensity": 0.62,
+                                    "Frequency": 0
+                                },
+                                {
+                                    "Time": 551,
+                                    "Intensity": 0.21,
+                                    "Frequency": 0
+                                },
+                                {
+                                    "Time": 700,
+                                    "Intensity": 0,
+                                    "Frequency": 0
+                                }
+                            ]
+                        },
+                        "Duration": 700,
+                        "Index": 0
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -10,6 +10,7 @@
 </template>
 
 <script>
+	import { playExtPrebaked, initialize, quit } from '@/uni_modules/richtap-haptic-lite'
 	export default {
 
 		data() {
@@ -77,10 +78,34 @@
 				]
 			};
 		},
+		mounted() {
+			console.log('luckyGrid mounted');
+			initialize({
+				fail: (err) => {
+					console.log(err.errCode);
+				}
+			})
+		},
+		onUnload() {
+			console.log('luckyGrid onUnload');
+			quit({
+				fail: (err) => {
+					console.log(err.errCode);
+				}
+			})
+		},
 		methods: {
+			playHaptic (effectName = 'RT_CLICK') {
+				playExtPrebaked({
+					effectName,
+					intensity: 255,
+					fail: (err) => {
+						console.log(err.errCode);
+					}
+				})
+			},
 			// 开始抽奖
-			start(index) {
-				
+			start (index) {
 				let that = this;
 				// 计算礼品最大下标
 				let count = this.prizes.length - 2;
@@ -99,10 +124,11 @@
 					that.bdStyle = 'bdStyle';
 					
 					let timer = setInterval(function() {
-						
+						that.playHaptic()
 						that.prizes[that.order[that.activeIndex]].active = true;
 						setTimeout(function() {
 							if (that.endStatus && (that.endNumber == that.activeIndex)) {
+								that.playHaptic()
 								// 抽奖结束
 								// 关闭音效
 								that.innerAudioContext.pause()
@@ -134,12 +160,12 @@
 				}
 			},
 			// 结束抽奖
-			end(prizeId) {
+			end (prizeId) {
 				this.endNumber = prizeId;
 				this.endStatus = true;
 			},
 			// 播放音效
-			music(){
+			music () {
 				this.innerAudioContext = uni.createInnerAudioContext();
 				this.innerAudioContext.autoplay = true;
 				this.innerAudioContext.loop = true;

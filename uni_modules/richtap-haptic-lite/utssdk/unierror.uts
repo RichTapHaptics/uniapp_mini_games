@@ -1,0 +1,62 @@
+/* 此规范为 uni 规范，可以按照自己的需要选择是否实现 */
+
+/**
+ * 错误主题
+ * 注意：错误主题一般为插件名称，每个组件不同，需要使用时请更改。
+ * [可选实现]
+ */
+export const HapticErrorSubject = 'richtap-haptic-lite';
+
+/**
+ * 错误码
+ * 根据uni错误码规范要求，建议错误码以90开头，以下是错误码示例：
+ * - 9010001 错误信息1
+ * - 9010002 错误信息2
+ */
+
+export type HapticErrorCode = 9010001 | 9010002 | 9010003 | 9010004 | 9010005 | 9010006 | 9010007 | 9010008 | 9010009 | 9010010
+
+
+/**
+ * 错误信息
+ * @UniError
+ * [可选实现]
+ */
+export const HapticErrorInfo : Map<HapticErrorCode, string> = new Map([
+  /**
+   * 错误码及对应的错误信息
+   */
+  [9010001, 'call getSDKVersion error'],
+  [9010002, 'call getPluginVersion error'],
+	[9010003, 'call isRichTapSupported error'],
+	[9010004, 'call initialize error'],
+	[9010005, 'call quit error'],
+	[9010006, 'call playHaptic error'],
+	[9010007, 'call stopHaptic error'],
+	[9010008, 'call updateLoopParameters error'],
+	[9010009, 'call playExtPrebaked error'],
+	[9010010, 'call getPrebakedEffectId error'],
+]);
+
+
+/**
+ * 错误对象实现
+ */
+export class HapticError extends UniError {
+
+  /**
+   * 错误对象构造函数
+   */
+  constructor(errCode: HapticErrorCode, cause: Error | null = null) {
+    super();
+    this.errSubject = HapticErrorSubject;
+    this.errCode = errCode;
+    this.errMsg = HapticErrorInfo.get(errCode) ?? "";
+		this.cause = cause;
+  }
+}
+
+// iOSb不支持导出范型
+export type SuccessFunc = () => void
+
+export type FailFunc = (res : HapticError) => void

@@ -41,7 +41,7 @@
 
 <script>
 	import { playExtPrebaked, initialize, quit, playHaptic } from '@/uni_modules/richtap-haptic-lite'
-
+	import he1 from '@/static/car/speed.json'
 	export default {
 		data() {
 			return {
@@ -89,20 +89,20 @@
 				touchStartX: null,
 				// 手指触摸移动x坐标
 				touchMoveX: null,
-				// 加油he效果
-				he1: '{\"Metadata\":{\"Version\":2,\"Created\":\"2022-04-27\",\"Description\":\"Exported from RichTap Creator Pro\"},\"PatternList\":[{\"AbsoluteTime\":13,\"Pattern\":[{\"Event\":{\"Type\":\"continuous\",\"Duration\":2468,\"RelativeTime\":0,\"Parameters\":{\"Intensity\":97,\"Frequency\":34,\"Curve\":[{\"Time\":0,\"Intensity\":0,\"Frequency\":-7},{\"Time\":42,\"Intensity\":1,\"Frequency\":-6},{\"Time\":128,\"Intensity\":0.94,\"Frequency\":-4},{\"Time\":217,\"Intensity\":0.63,\"Frequency\":-14},{\"Time\":763,\"Intensity\":0.53,\"Frequency\":-10},{\"Time\":1125,\"Intensity\":0.48,\"Frequency\":-14},{\"Time\":1503,\"Intensity\":0.42,\"Frequency\":-14},{\"Time\":1858,\"Intensity\":0.39,\"Frequency\":-14},{\"Time\":2295,\"Intensity\":0.34,\"Frequency\":-17},{\"Time\":2448,\"Intensity\":0.21,\"Frequency\":-14},{\"Time\":2468,\"Intensity\":0,\"Frequency\":-21}]},\"Index\":0}},{\"Event\":{\"Type\":\"continuous\",\"Duration\":2468,\"RelativeTime\":2,\"Parameters\":{\"Intensity\":97,\"Frequency\":27,\"Curve\":[{\"Time\":0,\"Intensity\":0,\"Frequency\":-7},{\"Time\":47,\"Intensity\":0.9,\"Frequency\":-6},{\"Time\":128,\"Intensity\":0.84,\"Frequency\":-4},{\"Time\":143,\"Intensity\":0.59,\"Frequency\":-14},{\"Time\":183,\"Intensity\":0.16,\"Frequency\":-10},{\"Time\":1081,\"Intensity\":0.1,\"Frequency\":-14},{\"Time\":1464,\"Intensity\":0.07,\"Frequency\":-14},{\"Time\":1826,\"Intensity\":0.04,\"Frequency\":-14},{\"Time\":2056,\"Intensity\":0.04,\"Frequency\":-17},{\"Time\":2391,\"Intensity\":0.03,\"Frequency\":-14},{\"Time\":2468,\"Intensity\":0,\"Frequency\":-21}]},\"Index\":0}}]},{\"AbsoluteTime\":2486,\"Pattern\":[{\"Event\":{\"Type\":\"continuous\",\"Duration\":570,\"RelativeTime\":0,\"Parameters\":{\"Intensity\":80,\"Frequency\":90,\"Curve\":[{\"Time\":0,\"Intensity\":0,\"Frequency\":-100},{\"Time\":127,\"Intensity\":0.09,\"Frequency\":-80},{\"Time\":263,\"Intensity\":0.97,\"Frequency\":-34},{\"Time\":300,\"Intensity\":0.92,\"Frequency\":-34},{\"Time\":464,\"Intensity\":0.16,\"Frequency\":-60},{\"Time\":570,\"Intensity\":0,\"Frequency\":-88}]},\"Index\":0}}]}]}'
+				speedHe: ''
 			};
 		},
 		mounted() {
-			console.log('luckyGrid mounted');
+			console.log('car mounted');
 			initialize({
 				fail: (err) => {
 					console.log(err.errCode);
 				}
 			})
+			this.speedHe = JSON.stringify(he1)
 		},
 		onUnload() {
-			console.log('luckyGrid onUnload');
+			console.log('car onUnload');
 			quit({
 				fail: (err) => {
 					console.log(err.errCode);
@@ -410,7 +410,7 @@
 							// 碰撞油桶,增加游戏时间
 							// this.playHaptic('RT_AWARD')
 							playHaptic({
-								heStr: this.he1,
+								heStr: this.speedHe,
 								loop: 0,
 								intensity: 255,
 								interval: 0,

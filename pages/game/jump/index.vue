@@ -349,7 +349,6 @@
 								that.check();
 								clearInterval(t);
 							} else {
-								console.log(`移动中: ${max}/${num}`);
 								that.playHaptic('RT_FOOTSTEP', 255)
 								that.now = Number(that.now) + 1;
 								if (that.now > 19) {

@@ -218,7 +218,7 @@
 						}
 						that.gameStatus = 3;
 						console.log('游戏失败');
-						that.playHaptic('_GAMEOVER')
+						that.playHaptic('RT_GAMEOVER')
 						clearInterval(downTimer);
 					} else {
 						that.downTime--;
